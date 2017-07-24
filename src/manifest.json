@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+
+  "name": "YouTube Pause",
+  "description": "Allows you to pause YouTube videos using hotkeys from any tab",
+  "version": "1.0",
+
+  "commands": {
+	  "togglePlaying": {
+	    "suggested_key": {
+	      "default": "Ctrl+Space",
+	      "mac": "Command+Space"
+	    },
+	    "description": "Pause / Resume playing video"
+	  }
+	},
+
+	"background": {
+    "scripts": ["events.js"],
+    "persistent": false
+  	},
+
+	"content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["script.js"]
+    }
+  ]
+}
