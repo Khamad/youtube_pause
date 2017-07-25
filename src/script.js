@@ -4,11 +4,11 @@ chrome.runtime.onMessage.addListener(
   	switch(request.action) {
   		case 'play':
   			play();
-  			sendResponse({status: 'Playing', pausedTab: null});
+  			sendResponse({status: 'Playing'});
   			break;
   		case 'pause':
   			pause();
-  			sendResponse({status: 'Pausing', pausedTab: request.tab});
+  			sendResponse({status: 'Pausing'});
   			break;
   	}
   });

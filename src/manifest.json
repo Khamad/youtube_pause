@@ -3,7 +3,8 @@
 
   "name": "YouTube Pause",
   "description": "Allows you to pause YouTube videos using hotkeys from any tab",
-  "version": "1.0",
+  "version": "1.1",
+  "permissions": ["storage"],
 
   "commands": {
 	  "togglePlaying": {

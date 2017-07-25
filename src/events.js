@@ -1,28 +1,45 @@
 chrome.commands.onCommand.addListener(function(command) {
-	switch(command) {
-		case 'togglePlaying':
-			togglePlaying();
-			break;
-	}
+  switch(command) {
+    case 'togglePlaying':
+      togglePlaying();
+      break;
+  }
 });
 
-var pausedTab = null
-
 function togglePlaying() {
-	chrome.tabs.query({audible: true}, function(tabs) {
-		if (tabs.length > 0) {
-			sendAction('pause', tabs[0])
-		} else {
-			if (pausedTab) {
-				sendAction('play', pausedTab);
-			}
-		}
-	});
+  getSavedTab(function(savedTab) {
+    if (savedTab) {
+      sendAction('play', savedTab);
+      setSavedTab(null);
+    } else {
+      getPlayingTab(function(playingTab) {
+        if (playingTab) {
+          sendAction('pause', playingTab);
+          setSavedTab(playingTab);
+        }
+      })
+    }
+  })
 }
 
 function sendAction(action, tab) {
-	chrome.tabs.sendMessage(tab.id, {action: action, tab: tab}, function(response) {
-		pausedTab = response.pausedTab
-		console.log(response.status);
-	});
+  chrome.tabs.sendMessage(tab.id, {action: action}, function(response) {
+    console.log(response.status);
+  });
+}
+
+function getSavedTab(callback) {
+  chrome.storage.local.get(function(items) {
+    callback(items.tab);
+  });
+}
+
+function getPlayingTab(callback) {
+  chrome.tabs.query({audible: true}, function(tabs) {
+    callback(tabs[0])
+  });
+}
+
+function setSavedTab(tab) {
+  chrome.storage.local.set({tab: tab});
 }
